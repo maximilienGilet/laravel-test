@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\TicketController;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +34,7 @@ use App\Http\Controllers\TicketController;
 // });
 
 Route::get('/', function () {
-    return Inertia::render('Dashboard', [
-        'tickets' => Ticket::all()
-    ]);
+    return Redirect::route('tickets.index');        
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('tickets', TicketController::class);
