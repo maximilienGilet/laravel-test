@@ -21,7 +21,7 @@ class TicketController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Dashboard', ['tickets' => Ticket::with(['priority', 'type'])->get()]);
+        return Inertia::render('Dashboard', ['tickets' => Ticket::with(['priority', 'type'])->orderBy("created_at", "desc")->get()]);
     }
 
     /**
@@ -63,7 +63,7 @@ class TicketController extends Controller
     public function show($id)
     {
         return Inertia::render('Ticket/Show', [
-            
+            'ticket' => Ticket::find($id)
         ]);
     }
 
