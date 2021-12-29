@@ -1,7 +1,7 @@
 import { useForm } from '@inertiajs/inertia-react';
 import { Flex, Select, Spacer, Input, Textarea, Button, FormControl, FormLabel, FormErrorMessage, FormHelperText, Grid, Box } from "@chakra-ui/react";
 
-const TicketForm = ({ ticket, ticketTypes, ticketPriorities, submitRoute, submitMethod }) => {
+const TicketForm = ({ ticket, ticketTypes, ticketPriorities, submitRoute, submitMethod, saveText = "Enregistrer" }) => {
 
   const { setData, errors, processing, clearErrors, submit } = useForm(ticket);
 
@@ -74,7 +74,7 @@ const TicketForm = ({ ticket, ticketTypes, ticketPriorities, submitRoute, submit
       </FormControl>
       <br />
       <Button type='submit' colorScheme='teal' variant='solid'>
-        Enregistrer
+        {saveText}
       </Button>
     </form>
   );
