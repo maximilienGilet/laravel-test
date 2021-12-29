@@ -1,11 +1,12 @@
 import React from 'react';
 import Authenticated from '@/Layouts/Authenticated';
-import { Head } from '@inertiajs/inertia-react';
-import { Divider, Flex, Spacer, Textarea, Button, Text, Box, Stack, IconButton, Tag, Menu, MenuButton, MenuList, MenuItem, useToast } from '@chakra-ui/react';
+import { Head, Link } from '@inertiajs/inertia-react';
+import { Divider, Flex, Spacer, Textarea, Button, Text, Box, Stack, IconButton, Tag, Menu, MenuButton, MenuList, MenuItem, useToast, AlertDialog, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogBody, AlertDialogFooter } from '@chakra-ui/react';
 import { Activity, Calendar, ChevronDown, Clock, Edit, Info, Send, Share2, Upload } from 'react-feather';
 import User from '@/Components/User';
 import LastSeen from '@/Components/LastSeen';
 import { copyTextToClipboard } from '@/Helpers/clipboard';
+import { Inertia } from '@inertiajs/inertia';
 
 const sampleActivityData = [
     {
@@ -99,12 +100,17 @@ export default function TicketShow(props) {
     // console.log(props);
 
     const [comment, setComment] = React.useState("");
-    const [isCopied, setIsCopied] = React.useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+    const onClose = () => setIsDeleteModalOpen(false);
+    const cancelRef = React.useRef();
     const toast = useToast();
+
+    const onDelete = () => {
+        Inertia.delete(route('tickets.destroy', props.ticket.id));
+    }
 
     const handleShare = (e) => {
         e.preventDefault;
-        setIsCopied(true);
         copyTextToClipboard(window.location.href);
         toast({
             title: "Lien copié dans le presse-papier",
@@ -124,7 +130,7 @@ export default function TicketShow(props) {
                             <Tag>Tag</Tag>
                             <Tag>improvement</Tag>
                             <Tag>todo</Tag>
-                            <div><Calendar size={16}/> Création : <LastSeen date={(new Date).setHours(-80)} /></div>
+                            <div><Calendar size={16} /> Création : <LastSeen date={(new Date).setHours(-80)} /></div>
                         </Stack>
                         <Spacer />
                         <Stack spacing={3} direction="row">
@@ -135,12 +141,37 @@ export default function TicketShow(props) {
                                     Actions
                                 </MenuButton>
                                 <MenuList>
-                                    <MenuItem>Delete</MenuItem>
-                                    <MenuItem>Attend a Workshop</MenuItem>
+                                    <MenuItem onClick={() => setIsDeleteModalOpen(true)}>Supprimer</MenuItem>
                                 </MenuList>
                             </Menu>
                         </Stack>
                     </Flex>
+                    <AlertDialog
+                        isOpen={isDeleteModalOpen}
+                        leastDestructiveRef={cancelRef}
+                        onClose={onClose}
+                    >
+                        <AlertDialogOverlay>
+                            <AlertDialogContent>
+                                <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                    Supprimer le ticket
+                                </AlertDialogHeader>
+
+                                <AlertDialogBody>
+                                    Confirmer la suppression du ticket ?
+                                </AlertDialogBody>
+
+                                <AlertDialogFooter>
+                                    <Button ref={cancelRef} onClick={onClose}>
+                                        Annuler
+                                    </Button>
+                                    <Button colorScheme='red' onClick={onDelete} ml={3}>
+                                        Supprimer
+                                    </Button>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialogOverlay>
+                    </AlertDialog>
                 </>
             }
 
@@ -190,11 +221,13 @@ export default function TicketShow(props) {
                                                 <Flex align="center">
                                                     <Text className='mb-2 font-semibold ' color="gray">Client notifié</Text>
                                                     <Spacer />
-                                                    <IconButton
-                                                        // size="sm"
-                                                        variant='outline'
-                                                        icon={<Edit size={20} />}
-                                                    />
+                                                    <Link href={route("tickets.edit", props.ticket.id)}>
+                                                        <IconButton
+                                                            // size="sm"
+                                                            variant='outline'
+                                                            icon={<Edit size={20} />}
+                                                        />
+                                                    </Link>
                                                 </Flex>
                                                 <User displayName="Maximilien Gilet" email="maximilien.gilet@protonmail.com" />
                                             </section>
