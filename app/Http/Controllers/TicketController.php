@@ -83,11 +83,11 @@ class TicketController extends Controller
     public function edit(Ticket $ticket)
     {
         return Inertia::render('Ticket/Edit', [
-            'ticket' => [
-                'id' => $ticket->id,
-                'title' => $ticket->title,
-                'description' => $ticket->description
-            ]
+            'users' => User::all(),
+            'ticket' => $ticket,
+            'ticketTypes' => TicketType::all(),
+            'ticketTags' => TicketTag::all(),
+            'ticketPriorities' => TicketPriority::all()
         ]);
     }
 
@@ -102,7 +102,7 @@ class TicketController extends Controller
     {
         $ticket->update($request->validated());
 
-        return Redirect::route('tickets.index');
+        return Redirect::route('tickets.show', ['ticket' => $ticket]);
     }
 
     /**
