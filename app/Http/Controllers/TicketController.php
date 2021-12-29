@@ -9,6 +9,7 @@ use App\Models\TicketTag;
 use App\Models\TicketType;
 use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
@@ -21,7 +22,11 @@ class TicketController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Dashboard', ['tickets' => Ticket::with(['priority', 'type'])->orderBy("created_at", "desc")->get()]);
+        return Inertia::render('Dashboard', [
+            'tickets' => Ticket::with(['priority', 'type'])
+                ->orderBy("created_at", "desc")
+                ->get()
+        ]);
     }
 
     /**
@@ -47,9 +52,11 @@ class TicketController extends Controller
      */
     public function store(StoreTicketRequest $request)
     {
-        Ticket::create(
-            $request->validated()
-        );
+        $request->validated();
+        Ticket::create(array_merge([
+            'author_id' =>  Auth::id(),
+            //  ...$request->validated()
+        ], $request->safe()->all()));
 
         return Redirect::route('tickets.index');
     }

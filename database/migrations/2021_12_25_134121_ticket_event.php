@@ -13,7 +13,16 @@ class TicketEvent extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('ticket_events', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->string('type');
+            $table->string('data');
+
+            $table->foreignId('ticket_id')->constrained();
+
+            $table->foreignId('user_id')->constrained();
+        });
     }
 
     /**

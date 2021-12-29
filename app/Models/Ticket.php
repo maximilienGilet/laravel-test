@@ -14,15 +14,13 @@ class Ticket extends Model
 
     protected $fillable = [
         'title',
-        'description'
+        'description',
+        'type_id',
+        'priority_id',
+        'author_id'
     ];
 
     use HasFactory;
-
-    /**
-     * @var bool 
-     */
-    protected $active;
 
     /**
      * Get the events
