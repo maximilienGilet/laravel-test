@@ -141,6 +141,7 @@ export default function TicketShow(props) {
                                     Actions
                                 </MenuButton>
                                 <MenuList>
+                                    <Link href={route("tickets.edit", props.ticket.id)}><MenuItem >Modifier</MenuItem></Link>
                                     <MenuItem onClick={() => setIsDeleteModalOpen(true)}>Supprimer</MenuItem>
                                 </MenuList>
                             </Menu>
