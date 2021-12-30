@@ -7,6 +7,8 @@ import User from '@/Components/User';
 import LastSeen from '@/Components/LastSeen';
 import { copyTextToClipboard } from '@/Helpers/clipboard';
 import { Inertia } from '@inertiajs/inertia';
+import TicketType from '@/Components/TicketType';
+import TicketPriority from '@/Components/TicketPriority';
 
 const sampleActivityData = [
     {
@@ -127,9 +129,8 @@ export default function TicketShow(props) {
                     <h2 className="font-bold text-xl text-gray-800 leading-tight">{props.ticket.title}</h2>
                     <Flex align="center">
                         <Stack spacing={3} direction="row" align="center">
-                            <Tag>Tag</Tag>
-                            <Tag>improvement</Tag>
-                            <Tag>todo</Tag>
+                            <TicketType type={props.ticket.type.name} />
+                            <TicketPriority priority={props.ticket.priority.name} />
                             <div><Calendar size={16} /> Création : <LastSeen date={(new Date).setHours(-80)} /></div>
                         </Stack>
                         <Spacer />

@@ -70,7 +70,7 @@ class TicketController extends Controller
     public function show($id)
     {
         return Inertia::render('Ticket/Show', [
-            'ticket' => Ticket::find($id)
+            'ticket' => Ticket::with(['priority', 'type', "author"])->get()->find($id)
         ]);
     }
 
