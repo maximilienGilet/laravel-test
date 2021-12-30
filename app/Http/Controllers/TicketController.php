@@ -23,7 +23,7 @@ class TicketController extends Controller
     public function index()
     {
         return Inertia::render('Dashboard', [
-            'tickets' => Ticket::with(['priority', 'type'])
+            'tickets' => Ticket::with(['priority', 'type', "author"])
                 ->orderBy("created_at", "desc")
                 ->get()
         ]);
